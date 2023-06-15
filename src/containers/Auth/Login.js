@@ -86,6 +86,7 @@ class Login extends Component {
                 />
               </div>
             </div>
+
             <div className="col-12">
               <button
                 className="btn-login"
@@ -95,6 +96,10 @@ class Login extends Component {
               >
                 Login
               </button>
+            </div>
+
+            <div className="col-12" style={{ color: "red" }}>
+              {this.state.errMessage}
             </div>
 
             <div className="col-12">
