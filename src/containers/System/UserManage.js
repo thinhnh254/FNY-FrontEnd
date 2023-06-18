@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getAllUsers } from "../../services/userService";
+import ModalUser from "./ModalUser";
 import "./UserManage.scss";
 class UserManage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       arrUsers: [],
+      isOpenModalUser: false,
     };
   }
 
   async componentDidMount() {
     let response = await getAllUsers("ALL");
-    console.log("get user from BE: ", response);
     if (response && response.errCode === 0) {
       this.setState({
         arrUsers: response.users,
@@ -20,11 +21,36 @@ class UserManage extends Component {
     }
   }
 
+  handleAddNewUser = () => {
+    this.setState({
+      isOpenModalUser: true,
+    });
+  };
+
+  toggleUserModal = () => {
+    this.setState({
+      isOpenModalUser: !this.state.isOpenModalUser,
+    });
+  };
+
   render() {
     let arrUsers = this.state.arrUsers;
     return (
       <div className="users-container">
+        <ModalUser
+          isOpen={this.state.isOpenModalUser}
+          toggleFromParent={this.toggleUserModal}
+          test={"abc"}
+        />
         <div className="title text-center">Manage users with Thinh</div>
+        <div className="mx-1">
+          <button
+            className="btn btn-primary px-3"
+            onClick={() => this.handleAddNewUser()}
+          >
+            <i className="fas fa-plus me-2"></i>Add new user
+          </button>
+        </div>
         <div className="users-table mt-3 mx-1">
           <table id="customers">
             <tr>
@@ -37,7 +63,6 @@ class UserManage extends Component {
 
             {arrUsers &&
               arrUsers.map((item, index) => {
-                console.log("check map", item, index);
                 return (
                   <tr key={index}>
                     <td>{item.email}</td>
